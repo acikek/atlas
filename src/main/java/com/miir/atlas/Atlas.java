@@ -2,6 +2,7 @@ package com.miir.atlas;
 
 import com.miir.atlas.world.gen.biome.source.AtlasBiomeSource;
 import com.miir.atlas.world.gen.chunk.AtlasChunkGenerator;
+import com.miir.atlas.world.gen.biome.entry.BiomeEntriesLoader;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -24,5 +25,6 @@ public class Atlas implements ModInitializer {
     public void onInitialize() {
         Registry.register(Registries.CHUNK_GENERATOR, id("atlas"), AtlasChunkGenerator.CODEC);
         Registry.register(Registries.BIOME_SOURCE, id("atlas"), AtlasBiomeSource.CODEC);
+        BiomeEntriesLoader.register();
     }
 }

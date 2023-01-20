@@ -1,11 +1,11 @@
-package com.miir.atlas.world.gen.biome;
+package com.miir.atlas.world.gen.biome.entry;
 
 import com.miir.atlas.Atlas;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.registry.Registries;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.world.biome.Biome;
 
 import java.util.List;
@@ -14,6 +14,14 @@ import java.util.Optional;
 public class BiomeEntry {
     public static final Identifier EMPTY = Atlas.id("empty");
     public static final BiomeEntryPriorityCodec PRIORITY_CODEC = new BiomeEntryPriorityCodec();
+
+    public static final Codec<BiomeEntry> CODEC = RecordCodecBuilder.create((instance) -> instance.group(
+            Biome.REGISTRY_CODEC.optionalFieldOf("biome").forGetter(BiomeEntry::getBiome),
+            PRIORITY_CODEC.listOf().optionalFieldOf("priority").forGetter(BiomeEntry::getPriority),
+            Codec.INT.fieldOf("color").forGetter(BiomeEntry::getColor)
+    ).apply(instance, BiomeEntry::new));
+
+    public static final Codec<List<BiomeEntry>> LIST_CODEC = Codecs.nonEmptyList(CODEC.listOf());
 
     private final Optional<RegistryEntry<Biome>> biome;
     private final Optional<List<RegistryEntry<Biome>>> priority;
@@ -27,12 +35,6 @@ public class BiomeEntry {
         this.color = color;
         topBiome = getTopBiome();
     }
-
-    public static final Codec<BiomeEntry> CODEC = RecordCodecBuilder.create((instance) -> instance.group(
-            Biome.REGISTRY_CODEC.optionalFieldOf("biome").forGetter(BiomeEntry::getBiome),
-            PRIORITY_CODEC.listOf().optionalFieldOf("priority").forGetter(BiomeEntry::getPriority),
-            Codec.INT.fieldOf("color").forGetter(BiomeEntry::getColor)
-    ).apply(instance, BiomeEntry::new));
 
     public RegistryEntry<Biome> getTopBiome() {
         if (biome.isPresent()) {

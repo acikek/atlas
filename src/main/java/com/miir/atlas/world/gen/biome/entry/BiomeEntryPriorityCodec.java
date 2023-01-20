@@ -1,4 +1,4 @@
-package com.miir.atlas.world.gen.biome;
+package com.miir.atlas.world.gen.biome.entry;
 
 import com.miir.atlas.mixin.RegistryElementCodecAccessor;
 import com.mojang.datafixers.util.Pair;
